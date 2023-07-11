@@ -4,7 +4,6 @@ import { DatabaseService } from 'src/shared/database/database.service';
 import { collections } from 'src/constants/collections';
 import { changeDefaultAddressDto } from '../../dtos/user/address/change-default-address.dto';
 import { Address, AddressDocument } from 'src/models/user/address.model';
-import { addAddressDto } from 'src/dtos/user/address/add-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -108,7 +107,10 @@ export class AddressService {
     return { status: 'Done' };
   }
 
-  async setDefaultAddress(userId: string, addresses: changeDefaultAddressDto): Promise<AddressDocument> {
+  async setDefaultAddress(
+    userId: string,
+    addresses: changeDefaultAddressDto,
+  ): Promise<AddressDocument> {
     this.address = this.db.getCollection(collections.ADDRESS_COLLECTION);
 
     const removeOlddefault = await this.address.updateOne(

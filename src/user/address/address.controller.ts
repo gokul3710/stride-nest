@@ -40,7 +40,10 @@ export class AddressController {
   @UseGuards(UserGuard)
   @UsePipes(ValidationPipe)
   addAddress(@Request() request, @Body() address: addAddressDto) {
-    return this.addressService.addAddress(request.user, {...address,_id: new ObjectId()});
+    return this.addressService.addAddress(request.user, {
+      ...address,
+      _id: new ObjectId(),
+    });
   }
 
   @Patch()

@@ -18,7 +18,7 @@ export class addAddressDto {
   @IsNotEmpty()
   @IsString()
   @IsPhoneNumber('IN')
-  @Length(10,10)
+  @Length(10, 10)
   @Matches(/^\d+$/, {
     message: 'Phone number must contain only numbers',
   })
@@ -43,7 +43,7 @@ export class addAddressDto {
 
   @IsNotEmpty()
   @IsString()
-  @Length(6,6)
+  @Length(6, 6)
   @Matches(/^\d+$/, {
     message: 'Pincode must contain only numbers',
   })
@@ -55,9 +55,9 @@ export class addAddressDto {
 
   @IsOptional()
   @IsIn(['India'])
-  country: 'India'
+  country: 'India';
 
   @IsOptional()
   @IsBoolean()
-  default: boolean
+  default: boolean;
 }

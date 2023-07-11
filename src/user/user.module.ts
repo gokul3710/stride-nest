@@ -7,6 +7,7 @@ import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { DatabaseModule } from 'src/shared/database/database.module';
 import { JwtStrategy } from './jwt.strategy';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   controllers: [UserController],
@@ -17,6 +18,7 @@ import { JwtStrategy } from './jwt.strategy';
     CartModule,
     OrderModule,
     DatabaseModule,
+    ReviewModule,
   ],
 })
 export class UserModule {}

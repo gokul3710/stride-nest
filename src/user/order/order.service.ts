@@ -1,9 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Collection, Document, ObjectId } from 'mongodb';
-import { type } from 'os';
+import { Collection, ObjectId } from 'mongodb';
 import { collections } from 'src/constants/collections';
-import { OrderDto } from 'src/dtos/user/order/order.dto';
-import { PaymentDto } from 'src/dtos/user/order/payment.dto';
 import { OrderDocument } from 'src/models/user/order.model';
 import { DatabaseService } from 'src/shared/database/database.service';
 
@@ -11,7 +8,7 @@ import { DatabaseService } from 'src/shared/database/database.service';
 export class OrderService {
   private order: Collection<OrderDocument>;
 
-  constructor(private readonly db: DatabaseService) { }
+  constructor(private readonly db: DatabaseService) {}
 
   async allOrders(userId: string): Promise<OrderDocument[]> {
     this.order = this.db.getCollection(collections.ORDER_COLLECTION);
@@ -26,7 +23,7 @@ export class OrderService {
     this.order = this.db.getCollection(collections.ORDER_COLLECTION);
 
     order.userId = new ObjectId(userId);
-    
+
     order.payment.userId = new ObjectId(userId);
 
     const cart = await this.db
@@ -58,7 +55,7 @@ export class OrderService {
       .getCollection(collections.PAYMENT_COLLECTION)
       .insertOne(order.payment);
     order.payment = paymentId.insertedId;
-    order.deliveryAddress.country = 'India'
+    order.deliveryAddress.country = 'India';
     const response = await this.order.insertOne(order);
     return response.insertedId;
   }
@@ -83,7 +80,6 @@ export class OrderService {
     const payment = await this.db
       .getCollection(collections.PAYMENT_COLLECTION)
       .findOne({ _id: order.payment });
-
 
     if (payment.method !== 'COD') {
       await this.db.getCollection(collections.PAYMENT_COLLECTION).updateOne(
@@ -110,7 +106,9 @@ export class OrderService {
     return order;
   }
 
-  async updateStock(products: { _id: ObjectId; quantity: number }[]): Promise<{status: 'Done'}> {
+  async updateStock(
+    products: { _id: ObjectId; quantity: number }[],
+  ): Promise<{ status: 'Done' }> {
     const productCollection = this.db.getCollection(
       collections.PRODUCT_COLLECTION,
     );
@@ -129,6 +127,6 @@ export class OrderService {
         throw new HttpException('Error updating stock', 400);
       });
 
-    return { status: 'Done' }
+    return { status: 'Done' };
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminGuard } from '../guards/admin.guard';
 
@@ -6,7 +6,7 @@ import { AdminGuard } from '../guards/admin.guard';
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  @Get('login')
+  @Post('login')
   adminLogin(@Body() admin: { email: string; password: string }) {
     return this.adminService.adminLogin(admin);
   }

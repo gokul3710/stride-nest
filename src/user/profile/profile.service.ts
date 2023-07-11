@@ -1,11 +1,12 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Collection, ObjectId } from 'mongodb';
-import { uploadFilesToCloudinary } from 'src/config/cloudinary.config';
 import { UserDocument } from 'src/models/user/user.model';
 import { DatabaseService } from 'src/shared/database/database.service';
 import { passwordChangeDto } from '../../dtos/user/profile/password-change.dto';
 import * as bcrypt from 'bcrypt';
 import { collections } from 'src/constants/collections';
+import {readFileSync} from 'fs'
+import { uploadFileToS3 } from 'src/config/aws.config';
 
 @Injectable()
 export class ProfileService {
@@ -107,14 +108,19 @@ export class ProfileService {
   ): Promise<{ status: 'Done'; data: string }> {
     this.user = this.db.getCollection(collections.USER_COLLECTION);
 
-    let image = images.map((image) => image.path);
-    image = await uploadFilesToCloudinary(image);
+    let file = images[0]
 
+    const fileBuffer = readFileSync(file?.path);
+    const fileName = file?.filename;
+
+    let link = await uploadFileToS3(fileBuffer,fileName)
+    console.log(link);
+    
     const response = await this.user.updateOne(
       { _id: new ObjectId(userId) },
       {
         $set: {
-          image: image[0],
+          image: link,
         },
       },
     );
@@ -123,10 +129,13 @@ export class ProfileService {
       throw new HttpException('Could not update image', 400);
     }
 
-    return { status: 'Done', data: image[0] };
+    return { status: 'Done', data: link };
   }
 
-  async changePassword(userId: string, passwords: passwordChangeDto): Promise<{ status: 'Done'}> {
+  async changePassword(
+    userId: string,
+    passwords: passwordChangeDto,
+  ): Promise<{ status: 'Done' }> {
     this.user = this.db.getCollection(collections.USER_COLLECTION);
 
     const user = await this.user.findOne({ _id: new ObjectId(userId) });
@@ -134,7 +143,7 @@ export class ProfileService {
       const status = await bcrypt.compare(passwords.password, user.password);
       if (status) {
         const password = await bcrypt.hash(passwords.newPassword, 10);
-        const response = this.user.updateOne(
+        const response = await this.user.updateOne(
           { _id: new ObjectId(userId) },
           {
             $set: {
@@ -143,7 +152,7 @@ export class ProfileService {
           },
         );
 
-        return { status: 'Done'};
+        return { status: 'Done' };
       } else {
         throw new HttpException('Wrong Password', 400);
       }

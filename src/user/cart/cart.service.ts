@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Collection, Document, ObjectId } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { collections } from 'src/constants/collections';
 import { DatabaseService } from 'src/shared/database/database.service';
 import { UserService } from '../user.service';
@@ -257,7 +257,7 @@ export class CartService {
   async changeQuantity(
     userId: string,
     data: { productId: string; count: number },
-  ): Promise<{status: 'Done'}> {
+  ): Promise<{ status: 'Done' }> {
     this.cart = this.db.getCollection(collections.CART_COLLECTION);
 
     const count = Number(data.count);

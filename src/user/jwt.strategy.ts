@@ -3,8 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { userJwtPayload } from '../auth/interfaces/jwt-user.payload';
 import { DatabaseService } from 'src/shared/database/database.service';
-import { collections } from 'src/constants/collections';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: userJwtPayload) {  
+  async validate(payload: userJwtPayload) {
     if (!payload) {
       return new HttpException('Invalid Token', 401);
     }

@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, Length, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator';
 
 export class userSignupDto {
   @IsNotEmpty()
@@ -20,7 +27,7 @@ export class userSignupDto {
   @IsNotEmpty()
   @IsString()
   @IsPhoneNumber('IN')
-  @Length(10,10)
+  @Length(10, 10)
   @Matches(/^\d+$/, {
     message: 'Phone number must contain only numbers',
   })

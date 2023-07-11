@@ -12,4 +12,5 @@ export const enum collections {
   STYLE_COLLECTION = 'style',
   BANNER_COLLECTION = 'banner',
   SESSION_COLLECTION = 'session',
+  REVIEW_COLLECTION = 'review',
 }
