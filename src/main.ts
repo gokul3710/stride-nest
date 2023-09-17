@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 import { config } from 'dotenv';
-import { domains } from './constants/domains';
+import { domains } from './core/constants/domains';
 config();
 
 async function bootstrap() {
